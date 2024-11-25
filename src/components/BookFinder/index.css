@@ -1,0 +1,492 @@
+.book-finder-container {
+    padding: 20px;
+  }
+  
+  .heading {
+    font-size: 2em;
+    margin-bottom: 20px;
+  }
+  
+  .search-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+  }
+  
+  .books-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .book-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .book-title {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+  
+  .book-author,
+  .book-publisher,
+  .book-publish-year,
+  .book-isbn {
+    margin: 5px 0;
+  }
+  
+  .loading-message,
+  .error-message,
+  .no-books-found {
+    text-align: center;
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+  .filters-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-select {
+    margin-right: 10px;
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .loading-message,
+  .error-message {
+    color: red;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .books-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .no-books-found {
+    text-align: center;
+    font-size: 18px;
+  }
+  /* Add custom CSS to include transitions and keyframes animations */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Optional: Add any base styling for your app */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  /* Keyframe animation for smooth hover effect */
+  @keyframes hover-scale {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Book cover hover animation */
+  .book-cover {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .book-cover:hover {
+    animation: hover-scale 0.3s ease-in-out;
+  }
+
+  /* Card shadow animation for books */
+  .book-item {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .book-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Input and select dropdown styling */
+  .search-input,
+  .filter-select {
+    border: 2px solid #d1d1d1;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-input:focus,
+  .filter-select:focus {
+    border-color: #4A90E2;
+  }
+
+  .loading-message,
+  .no-books-found,
+  .error-message {
+    font-size: 1rem;
+    color: #ff4d4f;
+  }
+}
+
+@layer utilities {
+  /* Responsive utility classes */
+  @screen sm {
+    /* For small screens (mobile devices) */
+    .book-finder-container {
+      padding: 1rem;
+    }
+  }
+
+  @screen md {
+    /* For medium screens (tablets) */
+    .book-finder-container {
+      padding: 2rem;
+    }
+  }
+
+  @screen lg {
+    /* For large screens (desktops) */
+    .book-finder-container {
+      padding: 3rem;
+    }
+  }
+}
+/* Add custom CSS to include transitions and keyframes animations */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Body styling with a gradient background */
+  body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Gradient background */
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  /* Keyframe animation for smooth hover effect */
+  @keyframes hover-scale {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Book cover hover animation */
+  .book-cover {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .book-cover:hover {
+    animation: hover-scale 0.3s ease-in-out;
+  }
+
+  /* Card shadow animation for books */
+  .book-item {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .book-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Input and select dropdown styling */
+  .search-input,
+  .filter-select {
+    border: 2px solid #d1d1d1;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .search-input:focus,
+  .filter-select:focus {
+    border-color: #4A90E2;
+  }
+
+  /* Loading and error messages */
+  .loading-message,
+  .no-books-found,
+  .error-message {
+    font-size: 1rem;
+    color: #ff4d4f;
+  }
+
+  /* Gradient styling for header and search box */
+  .book-finder-container {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    border-radius: 0.5rem;
+    padding: 2rem;
+  }
+}
+
+@layer utilities {
+  /* Responsive utility classes */
+  @screen sm {
+    /* For small screens (mobile devices) */
+    .book-finder-container {
+      padding: 1rem;
+    }
+
+    .books-list {
+      flex-wrap: nowrap;
+      justify-content: center;
+    }
+
+    .book-item {
+      margin-right: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @screen md {
+    /* For medium screens (tablets) */
+    .book-finder-container {
+      padding: 2rem;
+    }
+
+    .books-list {
+      flex-wrap: wrap;
+      justify-content: flex-start;
+    }
+
+    .book-item {
+      margin-right: 1rem;
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  @screen lg {
+    /* For large screens (desktops) */
+    .book-finder-container {
+      padding: 3rem;
+    }
+
+    .books-list {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+
+    .book-item {
+      width: 250px; /* Set book item width */
+      margin-right: 1.5rem;
+    }
+  }
+}
+
+
+/* General styles for the BookFinder container */
+/* Book Finder Container */
+.book-finder-container {
+    background-image: url('https://w0.peakpx.com/wallpaper/960/362/HD-wallpaper-library-background-beautiful-library-book.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    color: #fff;
+    height: 120vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center content */
+    overflow: hidden;
+  }
+  
+  /* Styling for book items horizontally */
+  .books-list {
+    display: flex;
+    flex-wrap: wrap; /* Ensures books can wrap to the next row */
+    gap: 16px; /* Space between books */
+    overflow-x: auto; /* Enables horizontal scrolling if necessary */
+    padding: 20px 0;
+    justify-content: center; /* Center the books */
+  }
+  
+  /* Individual book item styles */
+  .book-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+    width: auto; /* Auto width to fit content */
+    max-width: 200px; /* Maximum width to avoid excessive stretching */
+    margin: 0 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Slight background color for contrast */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    padding: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition on hover */
+  }
+  
+  /* Hover effect on book item */
+  .book-item:hover {
+    transform: translateY(-10px); /* Slightly lift the book item on hover */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+  }
+  
+  /* Book image container */
+  .book-image-container {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  /* Book cover image styling */
+  .book-cover {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Filter container */
+  .filters-container {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    justify-content: center; /* Center filters */
+    flex-wrap: wrap;
+  }
+  
+  /* Filter select styles */
+  .filter-select {
+    background-color: rgba(255, 255, 255, 0.7); /* Light background for select */
+    color: #333;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 150px; /* Set a reasonable width for the dropdown */
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover effect for filter selects */
+  .filter-select:hover {
+    background-color: rgba(255, 255, 255, 1); /* Darken background on hover */
+  }
+  
+  /* Search input styling */
+  .search-input {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 10px;
+    border-radius: 5px;
+    width: calc(100% - 40px);
+    margin-left: 10px;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Search input hover effect */
+  .search-input:hover {
+    background-color: rgba(255, 255, 255, 1); /* Darken on hover */
+  }
+  
+  /* Error and Loading messages */
+  .loading-message, .error-message {
+    color: #ff6347;
+    text-align: center;
+  }
+  
+  /* No books found */
+  .no-books-found {
+    text-align: center;
+    color: #000000; /* Dark black color */
+    font-size: 1.2rem; /* Optional: adjust font size */
+    font-weight: bold; /* Optional: makes the text bold */
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Optional: Add a slight background to make the text stand out */
+    border-radius: 5px; /* Optional: rounded corners */
+  }
+  
+  
+  /* Title styling */
+  .book-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  /* Author and other book info styling */
+  .book-author, .book-publisher, .book-publish-year, .book-isbn {
+    font-size: 0.9rem;
+    color: #555;
+    margin: 4px 0;
+  }
+  /* ISBN Input Container */
+.isbn-input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    justify-content: center; /* Center-align the ISBN search input */
+  }
+  
+  /* ISBN Input Field */
+  .isbn-input {
+    width: 250px; /* Set a smaller width for the ISBN input */
+    padding: 0.5rem 1rem; /* Add padding to make it neat but still compact */
+    border-radius: 1rem; /* Use rounded corners for a modern look */
+    border: 2px solid #ddd; /* Light gray border */
+    font-size: 1rem; /* Slightly smaller font size */
+    color: #333; /* Dark text for readability */
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  
+  /* ISBN Input - Hover and Focus Effects */
+  .isbn-input:hover {
+    border-color: #4f8cf3; /* Light blue border on hover */
+  }
+  
+  .isbn-input:focus {
+    border-color: #4f8cf3; /* Blue border when focused */
+    box-shadow: 0 0 5px rgba(79, 140, 243, 0.4); /* Soft blue glow effect */
+    transform: scale(1.05); /* Slight zoom-in effect when focused */
+  }
+  
+  /* ISBN Input Placeholder Text Styling */
+  .isbn-input::placeholder {
+    color: #aaa; /* Light gray placeholder */
+    font-style: italic;
+    font-size: 0.9rem; /* Slightly smaller placeholder text */
+  }
+  
+  /* Optional: Icon Styling */
+  .isbn-input-container .search-icon {
+    width: 20px; /* Smaller icon */
+    height: 20px;
+    margin-right: 0.5rem;
+    filter: invert(50%) sepia(100%) saturate(100%) hue-rotate(100deg); /* Apply a nice color filter to the icon */
+  }
+  
