@@ -1,0 +1,92 @@
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    justify-content: center; /* Adjusted alignment for better responsiveness */
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: black !important;
+    color: #fff !important;
+    text-align: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+    position: relative; /* For positioning the Get in Touch text */
+  }
+ 
+  /* Footer Sections */
+  .contact-info, .about-us, .our-location {
+    flex: 1;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: start !important;
+    margin: 20px;
+    color: #fff !important;
+  }
+  
+  .about-us img {
+    width: 150px; /* Adjusted size */
+    margin-bottom: 10px;
+  }
+  
+  .our-location iframe {
+    width: 120%;
+    height: 200px;
+    border-radius: 8px;
+  }
+  
+  .copyright {
+    text-align: center;
+    padding: 10px 0;
+    color: #fff !important;
+    background-color: black;
+    width: 100%;
+    margin-top: 0;
+  }
+  
+  /* Media Queries for Responsive Layout */
+  
+  /* For Medium Screens */
+  @media screen and (max-width: 768px) {
+    .footer-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .contact-info, .about-us, .our-location {
+      width: 100%;
+      padding: 10px 0;
+    }
+  
+    .our-location iframe {
+      height: 250px;
+    }
+  }
+  
+  /* For Small Screens */
+  @media screen and (max-width: 480px) {
+    .about-us img {
+      width: 120px;
+    }
+  
+    .our-location iframe {
+      height: 200px;
+    }
+  
+    .copyright {
+      font-size: 12px;
+      padding: 15px 0;
+    }
+  
+    .get-in-touch {
+      font-size: 14px;
+    }
+  }
+  .bottom-footer{
+    display: flex;
+    flex-direction: row !important;
+  }
+  footer{
+    color: #fff !important;
+  }

@@ -1,255 +1,170 @@
 import React, { Component } from 'react';
+import Header from '../Header';
 import BookItem from '../BookItem';
 import './index.css';
+import ControlledCarousel from '../ControlledCarousel';
 
 class BookFinder extends Component {
   state = {
-    searchInput: '',          // Title search input
-    isbnInput: '',            // ISBN search input
-    booksList: [],            // Stores the books to display
+    booksList: [],
+    filteredBooks: [],
+    isbnInput: 'harp',
     isLoading: false,
     error: null,
-    filteredBooks: [],        // Books after applying filters
-    authorsFilter: [],        // Available authors to filter
-    yearsFilter: [],          // Available years to filter
-    genresFilter: [],         // Available genres to filter
-    languagesFilter: [],      // Available languages to filter
+    authorsFilter: [],
+    yearsFilter: [],
+    genresFilter: [],
+    languagesFilter: [],
     selectedAuthor: '',
     selectedYear: '',
     selectedGenre: '',
-    selectedLanguage: ''      // Stores the selected language filter
+    selectedLanguage: '',
+    showHeader: false, // Add showHeader state to control visibility of the header
   };
 
-  // Fetch books from Open Library API when the component mounts
-  async componentDidMount() {
-    this.setState({ isLoading: true });
+  componentDidMount() {
+    this.fetchBooks('harp');
+  }
 
-    // Retrieve the stored search state from localStorage if it exists
-    const storedSearchInput = localStorage.getItem('searchInput');
-    const storedIsbnInput = localStorage.getItem('isbnInput');
-    const storedSelectedAuthor = localStorage.getItem('selectedAuthor');
-    const storedSelectedYear = localStorage.getItem('selectedYear');
-    const storedSelectedGenre = localStorage.getItem('selectedGenre');
-    const storedSelectedLanguage = localStorage.getItem('selectedLanguage');
-
-    // Set the state to the stored values or use default
-    if (storedSearchInput) this.setState({ searchInput: storedSearchInput });
-    if (storedIsbnInput) this.setState({ isbnInput: storedIsbnInput });
-    if (storedSelectedAuthor) this.setState({ selectedAuthor: storedSelectedAuthor });
-    if (storedSelectedYear) this.setState({ selectedYear: storedSelectedYear });
-    if (storedSelectedGenre) this.setState({ selectedGenre: storedSelectedGenre });
-    if (storedSelectedLanguage) this.setState({ selectedLanguage: storedSelectedLanguage });
+  fetchBooks = async (searchTerm = '') => {
+    this.setState({ isLoading: true, error: null });
 
     try {
-      // Fetch books from Open Library API without a search term
-      const response = await fetch('https://openlibrary.org/search.json?q=');
+      const query = searchTerm ? `title=${searchTerm}` : '';
+      const response = await fetch(`https://openlibrary.org/search.json?${query}`);
       const data = await response.json();
 
       if (data && data.docs && Array.isArray(data.docs)) {
-        const newBooksList = data.docs.filter(book => book.title); // Ensure title exists
+        const booksList = data.docs.filter(book => book.title);
         this.setState({
-          booksList: newBooksList,
-          filteredBooks: newBooksList,
-          isLoading: false
-        });
-
-        // Initialize filter options based on fetched books
-        this.initializeFilters(newBooksList);
-      } else {
-        this.setState({
-          booksList: [],
-          filteredBooks: [],
+          booksList,
+          filteredBooks: booksList,
           isLoading: false,
-          error: 'No books found or invalid data structure.'
         });
+        this.initializeFilters(booksList);
+      } else {
+        this.setState({ error: 'No books found.', isLoading: false });
       }
     } catch (error) {
-      this.setState({ isLoading: false });
+      this.setState({ error: 'Failed to fetch books.', isLoading: false });
     }
-  }
-
-  // Save search state to localStorage whenever it changes
-  saveStateToLocalStorage = () => {
-    localStorage.setItem('searchInput', this.state.searchInput);
-    localStorage.setItem('isbnInput', this.state.isbnInput);
-    localStorage.setItem('selectedAuthor', this.state.selectedAuthor);
-    localStorage.setItem('selectedYear', this.state.selectedYear);
-    localStorage.setItem('selectedGenre', this.state.selectedGenre);
-    localStorage.setItem('selectedLanguage', this.state.selectedLanguage);
   };
 
-  // Fetch books by title when search input changes
-  onChangeSearchInput = async (event) => {
-    const searchInput = event.target.value;
-    this.setState({ searchInput, isLoading: true, error: null }, this.saveStateToLocalStorage);
+  handleSearch = (searchInput) => {
+    if (searchInput.trim() === '') {
+      this.setState({ isbnInput: '', booksList: [], filteredBooks: [] });
+    } else {
+      this.setState({ isbnInput: searchInput }, () => {
+        this.fetchBooks(searchInput);
+      });
+    }
+  };
 
-    if (searchInput === '') {
-      this.setState({ filteredBooks: this.state.booksList, isLoading: false });
+  onChangeIsbnInput = async (event) => {
+    const isbnInput = event.target.value;
+    this.setState({ isbnInput, isLoading: true });
+
+    if (isbnInput.trim() === '') {
+      this.setState({ booksList: [], filteredBooks: [], isLoading: false });
       return;
     }
 
     try {
-      const response = await fetch(`https://openlibrary.org/search.json?title=${searchInput}`);
+      const response = await fetch(`https://openlibrary.org/search.json?isbn=${isbnInput}`);
       const data = await response.json();
+      const booksList = data.docs.filter(book => book.title);
 
-      if (data && data.docs && Array.isArray(data.docs)) {
-        const newBooksList = data.docs.filter(book => book.title);
-        this.setState({
-          booksList: newBooksList,
-          filteredBooks: newBooksList,
-          isLoading: false
-        });
-        this.initializeFilters(newBooksList);
-      } else {
-        this.setState({
-          booksList: [],
-          filteredBooks: [],
-          isLoading: false,
-          error: 'No books found or invalid data structure.'
-        });
-      }
+      this.setState({ booksList, filteredBooks: booksList, isLoading: false });
+      this.initializeFilters(booksList);
     } catch (error) {
-      this.setState({ error: 'Failed to fetch books. Please try again later.', isLoading: false });
+      this.setState({ error: 'Failed to fetch books.', isLoading: false });
     }
   };
 
-  // Handle changes in filter dropdowns (author, year, genre, language)
-  handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value }, () => {
-      this.applyFilters();
-      this.saveStateToLocalStorage();
+  initializeFilters = (booksList) => {
+    const authors = [...new Set(booksList.flatMap(book => book.author_name || []))];
+    const years = [...new Set(booksList.map(book => book.first_publish_year))];
+    const genres = [...new Set(booksList.flatMap(book => book.subject || []))];
+    const languages = [...new Set(booksList.map(book => book.language ? book.language[0] : 'Unknown'))];
+
+    this.setState({
+      authorsFilter: authors,
+      yearsFilter: years,
+      genresFilter: genres,
+      languagesFilter: languages
     });
   };
 
-  // Apply selected filters
   applyFilters = () => {
     const { booksList, selectedAuthor, selectedYear, selectedGenre, selectedLanguage } = this.state;
-
     let filteredBooks = booksList;
 
-    if (selectedAuthor) {
-      filteredBooks = filteredBooks.filter(book => book.author_name && book.author_name.includes(selectedAuthor));
-    }
-    if (selectedYear) {
-      filteredBooks = filteredBooks.filter(book => book.first_publish_year === parseInt(selectedYear));
-    }
-    if (selectedGenre) {
-      filteredBooks = filteredBooks.filter(book => book.subject && book.subject.includes(selectedGenre));
-    }
-    if (selectedLanguage) {
-      filteredBooks = filteredBooks.filter(book => book.language && book.language.includes(selectedLanguage));
-    }
+    if (selectedAuthor) filteredBooks = filteredBooks.filter(book => book.author_name?.includes(selectedAuthor));
+    if (selectedYear) filteredBooks = filteredBooks.filter(book => book.first_publish_year === parseInt(selectedYear));
+    if (selectedGenre) filteredBooks = filteredBooks.filter(book => book.subject?.includes(selectedGenre));
+    if (selectedLanguage) filteredBooks = filteredBooks.filter(book => book.language?.includes(selectedLanguage));
 
     this.setState({ filteredBooks });
   };
 
+  handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value }, this.applyFilters);
+  };
+
   render() {
-    const {
-      searchInput, isbnInput, filteredBooks, isLoading, error,
-      authorsFilter, yearsFilter, genresFilter, languagesFilter,
-      selectedAuthor, selectedYear, selectedGenre, selectedLanguage
-    } = this.state;
+    const { filteredBooks, isbnInput, isLoading, error, authorsFilter, yearsFilter, genresFilter, languagesFilter, showHeader } = this.state;
 
     return (
-      <div className="book-finder-container bg-white rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-center mb-6 text-white">Book Finder</h1>
+      <>
+        {/* Conditionally render the Header based on showHeader */}
+        {showHeader && <Header onSearch={this.handleSearch} />}
+        
+        <ControlledCarousel />
+        <div className="book-finder-container">
+          <div className="filters-container">
+            <select name="selectedAuthor" onChange={this.handleFilterChange}>
+              <option value="">Select Author</option>
+              {authorsFilter.map((author, index) => (
+                <option key={index} value={author}>{author}</option>
+              ))}
+            </select>
 
-        {/* Title Search */}
-        <div className="search-input-container flex items-center mb-4">
-          <img
-            src="https://assets.ccbp.in/frontend/react-js/destinations-search-icon-img.png"
-            alt="search icon"
-            className="search-icon w-6 h-6 mr-2"
-          />
-          <input
-            type="search"
-            className="search-input w-full p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search for a book by title"
-            value={searchInput}
-            onChange={this.onChangeSearchInput}
-          />
+            <select name="selectedYear" onChange={this.handleFilterChange}>
+              <option value="">Select Year</option>
+              {yearsFilter.map((year, index) => (
+                <option key={index} value={year}>{year}</option>
+              ))}
+            </select>
+
+            <select name="selectedGenre" onChange={this.handleFilterChange}>
+              <option value="">Select Genre</option>
+              {genresFilter.map((genre, index) => (
+                <option key={index} value={genre}>{genre}</option>
+              ))}
+            </select>
+
+            <select name="selectedLanguage" onChange={this.handleFilterChange}>
+              <option value="">Select Language</option>
+              {languagesFilter.map((language, index) => (
+                <option key={index} value={language}>{language}</option>
+              ))}
+            </select>
+          </div>
+
+          {isLoading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : (
+            <ul className="books-list">
+              {filteredBooks.map(book => (
+                <BookItem key={book.key} book={book} />
+              ))}
+            </ul>
+          )}
         </div>
-
-        {/* ISBN Search */}
-        <div className="isbn-input-container flex items-center mb-4">
-          <input
-            type="text"
-            className="isbn-input w-full p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Search by ISBN"
-            value={isbnInput}
-            onChange={this.onChangeIsbnInput}
-          />
-        </div>
-
-        {/* Filters */}
-        <div className="filters-container flex gap-4 mb-6">
-          <select
-            name="selectedAuthor"
-            value={selectedAuthor}
-            onChange={this.handleFilterChange}
-            className="filter-select p-3 rounded-md w-full"
-          >
-            <option value="">Select Author</option>
-            {authorsFilter.map((author, index) => (
-              <option key={index} value={author}>
-                {author}
-              </option>
-            ))}
-          </select>
-
-          <select
-            name="selectedYear"
-            value={selectedYear}
-            onChange={this.handleFilterChange}
-            className="filter-select p-3 rounded-md w-full"
-          >
-            <option value="">Select Year</option>
-            {yearsFilter.map((year, index) => (
-              <option key={index} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-
-          <select
-            name="selectedGenre"
-            value={selectedGenre}
-            onChange={this.handleFilterChange}
-            className="filter-select p-3 rounded-md w-full"
-          >
-            <option value="">Select Genre</option>
-            {genresFilter.map((genre, index) => (
-              <option key={index} value={genre}>
-                {genre}
-              </option>
-            ))}
-          </select>
-
-          <select
-            name="selectedLanguage"
-            value={selectedLanguage}
-            onChange={this.handleFilterChange}
-            className="filter-select p-3 rounded-md w-full"
-          >
-            <option value="">Select Language</option>
-            {languagesFilter.map((language, index) => (
-              <option key={index} value={language}>
-                {language}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Display Books */}
-        {isLoading && <p>Loading...</p>}
-        {error && <p>{error}</p>}
-        <ul className="books-list">
-          {filteredBooks.map(book => (
-            <BookItem key={book.key} book={book} />
-          ))}
-        </ul>
-      </div>
+      </>
     );
   }
 }

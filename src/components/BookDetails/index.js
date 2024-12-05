@@ -1,71 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from React Router
-import './index.css'; // Import the CSS file
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import './index.css';
+import { Rings } from 'react-loader-spinner';
+import Header from '../Header';
 
-const BookDetails = () => {
+const BookDetails = ({ onAddToCart }) => {
+  const { id } = useParams();
   const [book, setBook] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
-    // Simulate fetching book details (For now, using static fallback data)
-    setIsLoading(false);
-
-    const defaultBook = {
-      title: "The Adventure of Knowledge",
-      author: "John Doe",
-      firstPublishYear: "2024",
-      isbn: "123-456-789",
-      publisher: "Fictional Press",
-      publishYear: "2024",
+    const fetchBookDetails = async () => {
+      const response = await fetch(`https://openlibrary.org/books/${id}.json`);
+      const data = await response.json();
+      setBook(data);
     };
 
-    setBook(defaultBook);
-  }, []);
-
-  if (isLoading) {
-    return <div className="loading">Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
+    fetchBookDetails();
+  }, [id]);
 
   if (!book) {
     return (
-      <div className="book-details-page">
-        <div className="default-book-content">
-          <h1>Book Not Found</h1>
-          <p>We're sorry, we couldn't find the details for this book. But here's why books are important:</p>
-          <p>
-            Books are windows to new worlds. They inspire, inform, and help us grow. Whether it's fiction that lets us escape reality or non-fiction that teaches us about the world, books play an essential role in shaping our knowledge and our imaginations.
-          </p>
-          <p>
-            Even when one book isn't available, there are countless others to explore. Every book we read adds to our understanding of ourselves and the world around us.
-          </p>
-          <p>
-            So, keep reading and exploring new knowledge. The right book is out there waiting for you!
-          </p>
-          <button className="learn-more-btn" onClick={() => navigate('/')}>Go Back to Book Finder</button>
-        </div>
+      <div className="loading-container">
+        <Rings
+          height="80"
+          width="80"
+          color="#4fa94d"
+          radius="6"
+          visible={true}
+          ariaLabel="rings-loading"
+        />
       </div>
     );
   }
 
+  const getDescription = (description) => {
+    if (typeof description === 'string') {
+      return description;
+    } else if (typeof description === 'object' && description.value) {
+      return description.value;
+    } else {
+      return 'No description available.';
+    }
+  };
+
+  const coverUrl = book.cover_i ? `https://covers.openlibrary.org/b/${id}/${book.cover_i}-L.jpg` : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR824cWY60_5KxvR09RnwNBpj7fRKA6iqrBdQ&s';
+
   return (
-    <div className="book-details-page">
-      <div className="book-details-container">
+    <>
+ 
+      <div className="book-details">
+        <div className="book-cover-container">
+          <img src={coverUrl} alt={book.title} className="book-cover" />
+        </div>
         <h1>{book.title}</h1>
-        <p><strong>Author:</strong> {book.author}</p>
-        <p><strong>First Published:</strong> {book.firstPublishYear}</p>
-        <p><strong>ISBN:</strong> {book.isbn}</p>
-        <p><strong>Publisher:</strong> {book.publisher}</p>
-        <p><strong>Publish Year:</strong> {book.publishYear}</p>
-        <button className="learn-more-btn" onClick={() => navigate('/')}>Go Back to Book Finder</button>
+        <p><strong>Category:</strong> {book.subjects ? book.subjects.join(', ') : 'N/A'}</p>
+        <p><strong>Binding:</strong> {book.binding ? book.binding : 'N/A'}</p>
+        <p><strong>Publishing Date:</strong> {book.publish_date ? book.publish_date : 'N/A'}</p>
+        <p><strong>Publisher:</strong> {book.publishers ? book.publishers.join(', ') : 'MAMBAZHAM'}</p>
+        <p><strong>Number of Pages:</strong> {book.number_of_pages ? book.number_of_pages : 'N/A'}</p>
+        <p><strong>Description:</strong> {getDescription(book.description)}</p>
+
+        <div className="add-to-cart">
+          <button className="add-to-cart-btn" onClick={() => onAddToCart(book)}>Add to Cart</button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

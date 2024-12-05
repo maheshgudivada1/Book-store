@@ -1,319 +1,150 @@
-/* Base styling for book item container */
+/* General Styling for the BookItem component */
 .book-item {
-    display: flex; /* Arrange book items horizontally */
-    flex-direction: row; /* Ensure horizontal layout */
-    align-items: center; /* Vertically center content */
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for book item */
-    padding: 1.5rem;
-    margin: 1rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
-    width: 100%;
-    max-width: 350px; /* Limit max width to ensure a clean layout */
-  }
-  
-  .book-item:hover {
-    transform: translateY(-8px); /* Slightly elevate the book item on hover */
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
-  }
-  
-  .book-image-container {
-    flex-shrink: 0; /* Prevent the image from shrinking */
-    margin-right: 1.5rem; /* Space between image and text */
-  }
-  
-  .book-cover {
-    width: 120px; /* Fixed width for the book cover */
-    height: 180px; /* Fixed height for the book cover */
-    object-fit: cover; /* Ensure the image doesn't stretch or distort */
-    border-radius: 8px;
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
-  }
-  
-  .book-cover:hover {
-    transform: scale(1.05); /* Slight zoom effect on hover */
-  }
-  
-  /* Book details container */
-  .book-details {
-    flex-grow: 1; /* Allow the details section to grow and take available space */
-    display: flex;
-    flex-direction: column; /* Arrange book details vertically */
-    justify-content: space-between;
-  }
-  
-  .book-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333; /* Dark text for readability */
-    margin-bottom: 0.5rem;
-  }
-  
-  .book-author,
-  .book-publisher,
-  .book-publish-year,
-  .book-isbn {
-    font-size: 1rem;
-    color: #555; /* Lighter gray for secondary text */
-    margin: 0.25rem 0;
-  }
-  
-  /* Hover styles for book details */
-  .book-title:hover {
-    color: #4a90e2; /* Change color on hover for title */
-  }
-  
-  .book-author,
-  .book-publisher,
-  .book-publish-year,
-  .book-isbn {
-    transition: color 0.3s ease;
-  }
-  
-  .book-author:hover,
-  .book-publisher:hover,
-  .book-publish-year:hover,
-  .book-isbn:hover {
-    color: #4a90e2; /* Highlight text on hover */
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .book-item {
-      flex-direction: column; /* Stack items vertically on smaller screens */
-      align-items: center; /* Center-align content when stacked */
-      max-width: 100%;
-      padding: 1rem; /* Adjust padding for smaller screens */
-    }
-  
-    .book-image-container {
-      margin-right: 0;
-      margin-bottom: 1rem; /* Add space below the image when stacked */
-    }
-  
-    .book-cover {
-      width: 100px; /* Smaller image size on mobile */
-      height: 150px; /* Smaller image height */
-    }
-  
-    .book-details {
-      align-items: center; /* Center align text in mobile view */
-      text-align: center; /* Center-align text for better readability */
-    }
-  
-    .book-title {
-      font-size: 1.125rem; /* Slightly smaller title font size */
-    }
-  
-    .book-author,
-    .book-publisher,
-    .book-publish-year,
-    .book-isbn {
-      font-size: 0.875rem; /* Smaller font size for mobile */
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .book-item {
-      max-width: 100%; /* Full width on very small screens */
-      margin: 0.5rem 0; /* Reduce margin on mobile */
-    }
-  }
-.container{
-    display: flex !important;
-    flex-direction: row;
+  list-style: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: #ffffff;
+  margin: 20px;
+  width: 225px !important;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
 }
-/* Main container that holds all the book items */
-.container {
-    display: flex; /* Flex container to hold book items in a row */
-    flex-wrap: wrap; /* Allow wrapping for smaller screen sizes */
-    justify-content: flex-start; /* Align items to the start of the container */
-    gap: 1.5rem; /* Space between book items */
-    padding: 2rem; /* Padding around the container */
-    background: linear-gradient(to right, #f8f9fa, #e9ecef); /* Gradient background for a modern feel */
-  }
-  
-  /* List of books inside the container */
-  .book-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap; /* Wrap book items when needed */
-    gap: 1.5rem; /* Space between the items */
-  }
-  
-  /* Book item styling */
-  .book-item {
-    display: flex; /* Horizontally arrange image and details */
-    flex-direction: column; /* Stack the content vertically within each item */
-    align-items: center; /* Center-align the content */
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
-    padding: 1.5rem;
-    width: 250px; /* Fixed width for each book item */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover transition */
-  }
-  
-  /* Hover effect on book items */
-  .book-item:hover {
-    transform: translateY(-8px); /* Slight elevation on hover */
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
-  }
-  
-  /* Image container styling */
-  .book-image-container {
-    margin-bottom: 1rem; /* Space between image and book details */
-  }
-  
-  .book-cover {
-    width: 150px; /* Set a fixed size for the book cover */
-    height: 200px;
-    object-fit: cover; /* Ensure image does not stretch or distort */
-    border-radius: 8px;
-    transition: transform 0.3s ease; /* Smooth zoom effect on hover */
-  }
-  
-  /* Hover effect on the cover image */
-  .book-cover:hover {
-    transform: scale(1.05); /* Slight zoom-in effect */
-  }
-  
-  /* Book details section */
-  .book-details {
-    text-align: center; /* Center-align the text */
-  }
-  
-  .book-title {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333; /* Dark color for title */
-    margin-bottom: 0.5rem;
-  }
-  
-  /* Book author, publisher, and other text */
-  .book-author,
-  .book-publisher,
-  .book-publish-year,
-  .book-isbn {
-    font-size: 1rem;
-    color: #555; /* Light gray text for other info */
-    margin: 0.25rem 0;
-  }
-  
-  /* Hover effect for text elements */
-  .book-author:hover,
-  .book-publisher:hover,
-  .book-publish-year:hover,
-  .book-isbn:hover {
-    color: #4a90e2; /* Change text color on hover */
-  }
-  
-  /* Responsive design */
-  @media (max-width: 768px) {
-    .container {
-      padding: 1rem; /* Reduce padding on smaller screens */
-    }
-  
-    .book-item {
-      width: 100%; /* Make book items take full width */
-      max-width: 300px; /* Set a max-width for each book item */
-      margin-bottom: 1.5rem; /* Space between items when stacked */
-    }
-  
-    .book-cover {
-      width: 120px; /* Smaller image on smaller screens */
-      height: 180px;
-    }
-  
-    .book-details {
-      text-align: center; /* Center text on smaller screens */
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .book-item {
-      width: 100%; /* Full width on very small screens */
-      max-width: 250px;
-    }
-  
-    .book-cover {
-      width: 100px; /* Even smaller image on very small screens */
-      height: 150px;
-    }
-  }
-/* index.css */
 
-.book-item {
-    list-style: none;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    max-width: 250px;
-    margin: 10px;
-    padding: 15px;
-    transition: transform 0.3s ease;
-  }
-  
-  .book-item:hover {
-    transform: translateY(-5px);
-  }
-  
-  .book-cover-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 15px; /* Space between image and details */
-    height: 200px; /* Ensure that this space is consistent, even if no image is present */
-  }
-  
-  .book-cover {
+/* Hover effect */
+.book-item:hover {
+  transform: translateY(-10px); /* Lift effect */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.book-cover {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.book-item:hover .book-cover {
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Book Details */
+.book-details {
+  padding: 15px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s ease;
+}
+
+.book-details h3 {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.book-details p {
+  font-size: 16px;
+  color: #777;
+  margin: 5px 0;
+}
+
+/* Hover Effects for the Details */
+.book-item:hover .book-details {
+  background-color: #eaeaea;
+}
+
+.book-item:hover .book-details h3 {
+  color: #0073e6;
+}
+
+/* Link styling */
+.book-item a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+/* Add subtle gradient background for an aesthetic touch */
+.book-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(0, 183, 255, 0.3), rgba(0, 55, 255, 0.2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.book-item:hover::before {
+  opacity: 1;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .book-item {
     max-width: 100%;
-    max-height: 100%;
-    object-fit: cover;
-    border-radius: 5px;
+    margin: 10px;
   }
-  
-  .book-cover-placeholder {
-    font-size: 18px;
-    color: #777;
-    text-align: center;
-    width: 100%;
+}
+
+/* Extra Styling for ISBN */
+.book-details p:last-child {
+  font-size: 14px;
+  color: black;
+}
+
+/* Add subtle shadows for a floating card effect */
+.book-item {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Transition for smooth hover effects */
+.book-item img {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Typography settings for smooth and professional look */
+.book-details h3 {
+  font-family: 'Roboto', sans-serif;
+}
+
+.book-details p {
+  font-family: 'Open Sans', sans-serif;
+  color: #555;
+}
+
+/* Darker theme for the mobile view */
+@media (prefers-color-scheme: dark) {
+  .book-item {
+    background-color: #333;
+    color: green;
   }
-  
+
+  .book-cover {
+    border-bottom: 2px solid #444;
+  }
+
   .book-details {
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px;
+    background-color: #444;
   }
-  
-  .book-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 8px;
+
+  .book-details h3 {
+    color: green;
   }
-  
-  .book-author,
-  .book-publisher,
-  .book-publish-year,
-  .book-isbn {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 4px;
+
+  .book-details p {
+    color: black;
   }
-  
-  .no-image {
-    height: 0; /* Prevents the space being taken by a missing image */
-    margin-bottom: 0; /* No space between image and text */
+
+  .book-item:hover .book-details {
+    background-color: #555;
   }
-  
-  .book-details {
-    flex-grow: 1; /* Ensures the details section expands if there is no image */
-  }
-    
+}
